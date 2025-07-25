@@ -1,0 +1,3 @@
+# Bỏ qua file môi trường trong cả client và backend
+client/.env
+backend/.env
