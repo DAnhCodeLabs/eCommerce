@@ -3,6 +3,14 @@
 html {
   font-family: "Roboto", sans-serif;
 }
+
+@theme {
+  --color-primary: #49225B;
+  --color-secondary: #6E3482;
+  --color-tertiary: #A56ABD;
+  --color-background-light: #E7DBEF;
+  --color-background-main: #F5EBFA;
+}
 :where(.css-dev-only-do-not-override-7t2xvq).ant-form-item {
   margin-bottom: 0 !important;
 }
@@ -12,5 +20,5 @@ html {
 :where(.css-dev-only-do-not-override-7t2xvq).ant-input-outlined:hover,
 :where(.css-dev-only-do-not-override-7t2xvq).ant-input-outlined:focus,
 :where(.css-dev-only-do-not-override-7t2xvq).ant-input-outlined:focus-within {
-  border-color: #11b76b !important;
+  border-color: var(--color-secondary) !important;
 }
