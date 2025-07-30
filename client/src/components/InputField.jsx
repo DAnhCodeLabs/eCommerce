@@ -21,13 +21,15 @@ const InputField = ({
     });
   }
 
+  const InputComponent = type === "password" ? Input.Password : Input;
+
   return (
     <Form.Item name={name} label={label} rules={inputRules}>
-      <Input
+      <InputComponent
         type={type}
         prefix={prefix}
         suffix={suffix}
-        className={`w-full !rounded-3xl !px-4 !py-2 !text-sm !text-gray-700 ${className}`}
+        className={`w-full !rounded-lg !px-4 !py-2 !text-sm !text-gray-700 ${className}`}
         {...rest}
       />
     </Form.Item>

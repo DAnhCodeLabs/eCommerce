@@ -5,11 +5,11 @@ html {
 }
 
 @theme {
-  --color-primary: #49225B;
-  --color-secondary: #6E3482;
-  --color-tertiary: #A56ABD;
-  --color-background-light: #E7DBEF;
-  --color-background-main: #F5EBFA;
+  --color-primary: #1a2d42;
+  --color-secondary: #2e4156;
+  --color-tertiary: #aab7b7;
+  --color-background-light: #c0c6ca;
+  --color-background-main: #d4d8dd;
 }
 :where(.css-dev-only-do-not-override-7t2xvq).ant-form-item {
   margin-bottom: 0 !important;

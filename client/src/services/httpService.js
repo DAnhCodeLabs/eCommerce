@@ -23,13 +23,13 @@ export const httpRequest = async (method, url, data = null, config = {}) => {
   };
 
   try {
-    const res = await api.request({
+    const response = await api.request({
       method,
       url,
       data,
       ...finalConfig,
     });
-    return res.data;
+    return response.data;
   } catch (err) {
     throw err;
   }
