@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("account");
     const storedToken = localStorage.getItem("token");
 
     if (storedUser && storedToken) {
@@ -21,12 +21,13 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem("user");
+    localStorage.removeItem("account");
     localStorage.removeItem("token");
   };
 
   const contextValue = {
     user,
+    setUser,
     token,
     logout,
     isAuthenticated: !!user && !!token,
