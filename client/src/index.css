@@ -5,12 +5,14 @@ html {
 }
 
 @theme {
-  --color-primary: #1a2d42;
-  --color-secondary: #2e4156;
-  --color-tertiary: #aab7b7;
-  --color-background-light: #c0c6ca;
-  --color-background-main: #d4d8dd;
+  --color-primary: #1e88e5; /* Màu chủ đạo - xanh lam công nghệ, dùng cho header, nút chính, link quan trọng */
+  --color-secondary: #26a69a; /* Màu phụ - xanh teal, dùng cho nút phụ, hover, hoặc block thông tin phụ */
+  --color-accent: #fbc02d; /* Màu điểm nhấn - vàng tươi, dùng cho nút CTA (mua ngay, khuyến mãi) */
+  --color-text-primary: #212121; /* Màu chữ chính - xám đậm, dùng cho tiêu đề, nội dung chính */
+  --color-text-secondary: #616161; /* Màu chữ phụ - xám trung tính, dùng cho mô tả, thông tin ít quan trọng */
+  --color-background: #ffffff; /* Màu nền trắng - nền tổng thể website */
 }
+
 :where(.css-dev-only-do-not-override-7t2xvq).ant-form-item {
   margin-bottom: 0 !important;
 }
@@ -23,164 +25,75 @@ html {
   border-color: var(--color-secondary) !important;
 }
 
-
-/* From Uiverse.io by _6441 */
-.spinner {
-  width: 16px;
-  height: 16px;
-  animation: spinner-y0fdc1 15s forwards infinite ease;
-  position: absolute;
-  transform-style: preserve-3d;
+.ant-form-item.css-dev-only-do-not-override-7t2xvq {
+    width: 100%;
 }
 
-.spinner > div {
-  height: 100%;
-  position: absolute;
+.swiper {
   width: 100%;
-  border: 1px solid #f8c828;
-}
-
-.spinner div:nth-of-type(1) {
-  transform: translateZ(-8px) rotateY(180deg);
-}
-
-.spinner div:nth-of-type(2) {
-  transform: rotateY(-270deg) translateX(50%);
-  transform-origin: top right;
-}
-
-.spinner div:nth-of-type(3) {
-  transform: rotateY(270deg) translateX(-50%);
-  transform-origin: center left;
-}
-
-.spinner div:nth-of-type(4) {
-  transform: rotateX(90deg) translateY(-50%);
-  transform-origin: top center;
-}
-
-.spinner div:nth-of-type(5) {
-  transform: rotateX(-90deg) translateY(50%);
-  transform-origin: bottom center;
-}
-
-.spinner div:nth-of-type(6) {
-  transform: translateZ(8px);
-}
-
-.spinner2 {
-  width: 32px;
-  height: 32px;
-  animation: spinner-y0fdc2 15s forwards infinite ease;
-  position: absolute;
-  transform-style: preserve-3d;
-}
-
-.spinner2 > div {
   height: 100%;
-  position: absolute;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
   width: 100%;
-  border: 1px solid var(--color-tertiary);
+  height: 100%;
+  object-fit: cover;
 }
 
-.spinner2 div:nth-of-type(1) {
-  transform: translateZ(-16px) rotateY(180deg);
+
+.loader {
+  color: #fff;
+  font-size: 10px;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: relative;
+  text-indent: -9999em;
+  animation: mulShdSpin 1.3s infinite linear;
+  transform: translateZ(0);
 }
 
-.spinner2 div:nth-of-type(2) {
-  transform: rotateY(-270deg) translateX(50%);
-  transform-origin: top right;
-}
-
-.spinner2 div:nth-of-type(3) {
-  transform: rotateY(270deg) translateX(-50%);
-  transform-origin: center left;
-}
-
-.spinner2 div:nth-of-type(4) {
-  transform: rotateX(90deg) translateY(-50%);
-  transform-origin: top center;
-}
-
-.spinner2 div:nth-of-type(5) {
-  transform: rotateX(-90deg) translateY(50%);
-  transform-origin: bottom center;
-}
-
-.spinner2 div:nth-of-type(6) {
-  transform: translateZ(16px);
-}
-
-@keyframes spinner-y0fdc1 {
-  0% {
-    transform: rotate(0deg) rotateX(0deg) rotateY(0deg);
+@keyframes mulShdSpin {
+  0%,
+  100% {
+    box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em,
+      0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
   }
-  24% {
-    transform: rotate(0deg) rotateX(360deg) rotateY(360deg);
-    width: 16px;
-    height: 16px;
+  12.5% {
+    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em,
+      0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
   }
   25% {
-    transform: rotate(0deg) rotateX(360deg) rotateY(360deg);
-    width: 48px;
-    height: 48px;
+    box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0,
+      0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+  }
+  37.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em,
+      0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
   }
   50% {
-    transform: rotate(225deg) rotateX(360deg) rotateY(360deg);
-    width: 48px;
-    height: 48px;
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em,
+      0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  62.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em,
+      0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
   }
   75% {
-    transform: rotate(0deg) rotateX(360deg) rotateY(360deg);
-    width: 48px;
-    height: 48px;
+    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em,
+      0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
   }
-  76% {
-    transform: rotate(0deg) rotateX(360deg) rotateY(360deg);
-    width: 16px;
-    height: 16px;
-  }
-  96% {
-    transform: rotate(0deg) rotateX(0deg) rotateY(0deg);
-  }
-  100% {
-    transform: rotate(0deg) rotateX(0deg) rotateY(0deg);
-  }
-}
-
-@keyframes spinner-y0fdc2 {
-  0% {
-    transform: rotate(45deg) rotateX(0deg) rotateY(0deg);
-  }
-  24% {
-    transform: rotate(45deg) rotateX(-360deg) rotateY(-360deg);
-    width: 32px;
-    height: 32px;
-  }
-  25% {
-    transform: rotate(45deg) rotateX(-360deg) rotateY(-360deg);
-    width: 48px;
-    height: 48px;
-  }
-  50% {
-    transform: rotate(-180deg) rotateX(-360deg) rotateY(-360deg);
-    width: 48px;
-    height: 48px;
-  }
-  75% {
-    transform: rotate(45deg) rotateX(-360deg) rotateY(-360deg);
-    width: 48px;
-    height: 48px;
-  }
-  76% {
-    transform: rotate(45deg) rotateX(-360deg) rotateY(-360deg);
-    width: 32px;
-    height: 32px;
-  }
-  96% {
-    transform: rotate(45deg) rotateX(0deg) rotateY(0deg);
-  }
-  100% {
-    transform: rotate(45deg) rotateX(0deg) rotateY(0deg);
+  87.5% {
+    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em,
+      0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
   }
 }

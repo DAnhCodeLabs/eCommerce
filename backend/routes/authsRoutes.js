@@ -1,11 +1,14 @@
 import express from "express";
 import {
   changeUserPassword,
+  createUserSellerAddress,
+  deleteUserSellerAddress,
   forgotUserPassword,
+  getUserSellerAddress,
   loginAccount,
   resetUserPassword,
-  updateUserAvatar,
   updateUserProfile,
+  updateUserSellerAddress,
   verifyUserOtp,
 } from "../controllers/authsController.js";
 import authorizeRole from "../middleware/authorizeRole.js";
@@ -13,29 +16,45 @@ import { uploadSingleImage } from "../middleware/upload.js";
 
 const authRouter = express.Router();
 
-//GET
-//POST
+// GET routes
+authRouter.get(
+  "/get-address",
+  authorizeRole(["user", "seller"]),
+  getUserSellerAddress
+);
+
+// POST routes
 authRouter.post("/login-account", loginAccount);
 authRouter.post("/verify-otp", verifyUserOtp);
 authRouter.post("/forgot-password", forgotUserPassword);
 authRouter.post("/reset-password", resetUserPassword);
 authRouter.post(
-  "/change-password",
+  "/create-address",
   authorizeRole(["user", "seller"]),
-  changeUserPassword
+  createUserSellerAddress
 );
-//PUT
-authRouter.put(
-  "/update-avatar",
-  authorizeRole(["user", "seller"]),
-  uploadSingleImage("avatar"),
-  updateUserAvatar
-);
+
+// PUT routes
 authRouter.put(
   "/update-profile",
   authorizeRole(["user", "seller"]),
   updateUserProfile
 );
-//DELETE
+authRouter.put(
+  "/change-password",
+  authorizeRole(["user", "seller"]),
+  changeUserPassword
+);
+authRouter.put(
+  "/update-address/:id",
+  authorizeRole(["user", "seller"]),
+  updateUserSellerAddress
+);
 
+// DELETE routes
+authRouter.delete(
+  "/delete-address/:id",
+  authorizeRole(["user", "seller"]),
+  deleteUserSellerAddress
+);
 export default authRouter;

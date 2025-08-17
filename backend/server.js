@@ -1,5 +1,5 @@
 import express from "express";
-import cros from "cors";
+import cors from "cors";
 import "dotenv/config";
 import connectDB from "./config/mongdb.js";
 import authRouter from "./routes/authsRoutes.js";
@@ -10,7 +10,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 connectDB()
 app.use(express.json());
-app.use(cros());
+app.use(cors());
 
 app.use("/api/auth", authRouter)
 app.use("/api/admin", adminRouter)

@@ -1,53 +1,45 @@
-// src/services/httpService.js
 import api from "./api";
 
-/**
- * Gửi request linh hoạt (GET, POST, PUT, DELETE, PATCH)
- * @param {"get"|"post"|"put"|"delete"|"patch"} method
- * @param {string} url
- * @param {any} data - payload (optional)
- * @param {object} config - custom headers, params... (optional)
- * @returns {Promise<any>}
- */
+const METHODS_WITHOUT_BODY = new Set(["get", "head", "delete", "options"]);
+
 export const httpRequest = async (method, url, data = null, config = {}) => {
+  const normalizedMethod = method.toLowerCase();
   const isFormData = data instanceof FormData;
 
   const headers = {
-    ...(isFormData ? { "Content-Type": "multipart/form-data" } : {}),
+    ...(!isFormData && { "Content-Type": "application/json" }),
+    ...(isFormData && data.getHeaders?.()),
     ...config.headers,
   };
 
-  const finalConfig = {
-    ...config,
+  const requestConfig = {
+    method: normalizedMethod,
+    url,
     headers,
+    ...config,
+    ...(data !== null &&
+      !METHODS_WITHOUT_BODY.has(normalizedMethod) && { data }),
   };
 
   try {
-    const response = await api.request({
+    const response = await api.request(requestConfig);
+    return response.data;
+  } catch (error) {
+    console.error(`HTTP Request failed: ${error.message}`, {
       method,
       url,
-      data,
-      ...finalConfig,
+      status: error.response?.status,
     });
-    return response.data;
-  } catch (err) {
-    throw err;
+    throw error;
   }
 };
-
-// Shortcut cho từng method
-
 export const httpGet = (url, config = {}) =>
   httpRequest("get", url, null, config);
-
 export const httpPost = (url, data, config = {}) =>
   httpRequest("post", url, data, config);
-
 export const httpPut = (url, data, config = {}) =>
   httpRequest("put", url, data, config);
-
 export const httpDelete = (url, config = {}) =>
   httpRequest("delete", url, null, config);
-
 export const httpPatch = (url, data, config = {}) =>
   httpRequest("patch", url, data, config);

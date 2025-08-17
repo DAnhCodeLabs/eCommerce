@@ -15,10 +15,13 @@ const addressSchema = new mongoose.Schema(
 
 const sellerInfoSchema = new mongoose.Schema(
   {
+    taxcode: { type: String, required: true }, 
+    dateOfIssue: { type: Date, required: true },
+    ExpirationDate: { type: Date, required: true },
+    PlaceOfGrant: { type: String, required: true },
     shopName: { type: String },
     addressSeller: { type: String },
     addressShop: { type: String },
-    country: { type: String },
   },
   { _id: false }
 );
@@ -44,10 +47,6 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
     },
     address: [addressSchema],
-    avatar: {
-      type: String,
-      default: null,
-    },
     sellerInfo: {
       type: sellerInfoSchema,
       default: undefined,

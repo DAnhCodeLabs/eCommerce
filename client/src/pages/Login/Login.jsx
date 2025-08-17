@@ -2,14 +2,14 @@
 import React, { useState } from "react";
 import { Divider, Form, message } from "antd";
 import { motion, AnimatePresence } from "framer-motion";
-import Loader from "../../components/Loader";
-import ScrollFadeIn from "../../components/ScrollFadeIn";
 import { AuthHeader } from "./features/AuthHeader";
 import { useAuth } from "../../contexts/AuthContext";
 import {useNavigate} from "react-router-dom";
 import { assets } from "../../assets/assets";
 import AuthForm from "./features/AuthForm";
 import { httpPost } from "../../services/httpService";
+import Loader from "../../components/commons/Loader";
+import ScrollFadeIn from "../../components/commons/ScrollFadeIn";
 
 const Login = () => {
   const [state, setState] = useState("login");
@@ -27,7 +27,7 @@ const Login = () => {
 
       switch (state) {
         case "register":
-          response = await httpPost("/user/register", {
+          response = await httpPost("/user/register/user", {
             username: values.username,
             email: values.email,
             phone: values.phone,
@@ -124,7 +124,7 @@ const Login = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -100 }}
                 transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="flex flex-col items-start justify-center w-1/2 bg-background-light p-8 rounded-3xl shadow-lg"
+                className="flex flex-col items-start justify-center w-1/2 bg-background p-8 rounded-3xl shadow-lg"
               >
                 <AuthHeader state={state} />
                 <AnimatePresence mode="wait">

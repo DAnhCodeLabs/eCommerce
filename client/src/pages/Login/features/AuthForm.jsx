@@ -1,9 +1,9 @@
 // AuthForm.jsx
 import { Form, Space, Checkbox } from "antd";
-import InputField from "../../../components/InputField";
-import CommonButton from "../../../components/CommonButton";
 import { OTPVerification } from "./OTPVerification";
 import { AuthFooter } from "./AuthFooter";
+import CommonButton from "../../../components/commons/CommonButton";
+import InputField from "../../../components/commons/InputField";
 
 const AuthForm = ({
   state,

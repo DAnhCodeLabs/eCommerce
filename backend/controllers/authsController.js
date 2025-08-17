@@ -1,13 +1,16 @@
 import dotenv from "dotenv";
 import {
-  login,
-  verifyOtp,
-  forgotPassword,
-  resetPassword,
   changePassword,
-  updateAvatar,
+  createAddress,
+  deleteAddress,
+  forgotPassword,
+  getAddress,
+  login,
+  resetPassword,
+  updateAddress,
   updateProfile,
-} from "./user/authUserController.js";
+  verifyOtp,
+} from "./user/userController.js";
 
 // Load biến môi trường
 dotenv.config();
@@ -18,5 +21,8 @@ export const verifyUserOtp = verifyOtp;
 export const forgotUserPassword = forgotPassword;
 export const resetUserPassword = resetPassword;
 export const changeUserPassword = changePassword;
-export const updateUserAvatar = updateAvatar;
 export const updateUserProfile = updateProfile;
+export const createUserSellerAddress = createAddress;
+export const updateUserSellerAddress = updateAddress;
+export const getUserSellerAddress = getAddress;
+export const deleteUserSellerAddress = deleteAddress;
