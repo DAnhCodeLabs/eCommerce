@@ -10,9 +10,9 @@ html {
   --color-accent: #fbc02d; /* Màu điểm nhấn - vàng tươi, dùng cho nút CTA (mua ngay, khuyến mãi) */
   --color-text-primary: #212121; /* Màu chữ chính - xám đậm, dùng cho tiêu đề, nội dung chính */
   --color-text-secondary: #616161; /* Màu chữ phụ - xám trung tính, dùng cho mô tả, thông tin ít quan trọng */
-  --color-background: #ffffff; /* Màu nền trắng - nền tổng thể website */
+  --color-background: #f7f7f7; /* Màu nền tổng thể - xám nhạt, dùng cho nền trang chính */
+  --color-background-main: #ffffff; /* Màu nền chính - trắng*/
 }
-
 :where(.css-dev-only-do-not-override-7t2xvq).ant-form-item {
   margin-bottom: 0 !important;
 }
@@ -26,7 +26,7 @@ html {
 }
 
 .ant-form-item.css-dev-only-do-not-override-7t2xvq {
-    width: 100%;
+  width: 100%;
 }
 
 .swiper {
@@ -48,7 +48,6 @@ html {
   height: 100%;
   object-fit: cover;
 }
-
 
 .loader {
   color: #fff;

@@ -52,17 +52,17 @@ const AuthForm = ({
         <InputField
           className="flex-1"
           label={"Email"}
-          rules={[
-            { type: "email", message: "Email không hợp lệ." },
-            {
-              min: 6,
-              message: "Email phải có ít nhất 6 ký tự.",
-            },
-            {
-              max: 50,
-              message: "Email không được vượt quá 50 ký tự.",
-            },
-          ]}
+          // rules={[
+          //   // { type: "email", message: "Email không hợp lệ." },
+          //   {
+          //     min: 6,
+          //     message: "Email phải có ít nhất 6 ký tự.",
+          //   },
+          //   {
+          //     max: 50,
+          //     message: "Email không được vượt quá 50 ký tự.",
+          //   },
+          // ]}
           name="email"
           required={true}
         />
@@ -73,16 +73,16 @@ const AuthForm = ({
           className="flex-1"
           label={state === "reset" ? "New Password" : "Password"}
           type="password"
-          rules={[
-            {
-              min: 6,
-              message: "Mật khẩu phải có ít nhất 6 ký tự.",
-            },
-            {
-              max: 50,
-              message: "Mật khẩu không được vượt quá 50 ký tự.",
-            },
-          ]}
+          // rules={[
+          //   {
+          //     min: 6,
+          //     message: "Mật khẩu phải có ít nhất 6 ký tự.",
+          //   },
+          //   {
+          //     max: 50,
+          //     message: "Mật khẩu không được vượt quá 50 ký tự.",
+          //   },
+          // ]}
           name="password"
           required={true}
         />

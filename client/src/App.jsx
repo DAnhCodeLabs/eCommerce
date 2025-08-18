@@ -9,7 +9,7 @@ const App = () => {
   const hideLayout = ["/login", "/signin"].includes(location.pathname);
 
   return (
-    <div className="bg- flex flex-col w-full min-h-screen">
+    <div className="bg-background flex flex-col w-full min-h-screen">
       {!hideLayout && <Navbar />}
       <div className="flex-1">
         <AppRoutes />

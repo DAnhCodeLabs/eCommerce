@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-
-// import required modules
 import { Autoplay, Pagination } from "swiper/modules";
 import { assets } from "../assets/assets";
+import SlideContent from "./SlideContent";
 
 const Banner = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div className="w-[1400px] mx-auto my-6 flex justify-center items-center gap-4">
       {/* Banner chính */}
@@ -25,86 +23,38 @@ const Banner = () => {
           pagination={{ clickable: true }}
           modules={[Autoplay, Pagination]}
           className="mySwiper h-full"
+          onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
         >
           <SwiperSlide className="h-full bg-secondary/10 ">
-            <div className="flex items-center justify-between h-full w-full p-12 gap-4">
-              <div className="flex flex-col items-start justify-center w-1/2 h-full">
-                <h3 className="text-xl font-semibold mb-2 text-primary">
-                  Up To 50% Off
-                </h3>
-                <h2 className="text-3xl text-start font-bold mb-4 text-secondary">
-                  For Your First Goemart Shopping
-                </h2>
-                <p className="text-start text-text-secondary text-base">
-                  There are many variations of passages orem psum available but
-                  the majority have suffered alteration in some form by injected
-                  humour.
-                </p>
-              </div>
-              <div className="flex items-center justify-center h-100 w-100">
-                <img src={assets.hero1} alt="" />
-              </div>
-            </div>
+            <SlideContent
+              idx={0}
+              img={assets.hero1}
+              activeIndex={activeIndex}
+            />
           </SwiperSlide>
+
           <SwiperSlide className="h-full bg-secondary/10 ">
-            <div className="flex items-center justify-between h-full w-full p-12 gap-4">
-              <div className="flex flex-col items-start justify-center w-1/2 h-full">
-                <h3 className="text-xl font-semibold mb-2 text-primary">
-                  Up To 50% Off
-                </h3>
-                <h2 className="text-3xl text-start font-bold mb-4 text-secondary">
-                  For Your First Goemart Shopping
-                </h2>
-                <p className="text-start text-text-secondary text-base">
-                  There are many variations of passages orem psum available but
-                  the majority have suffered alteration in some form by injected
-                  humour.
-                </p>
-              </div>
-              <div className="flex items-center justify-center h-100 w-100">
-                <img src={assets.hero2} alt="" />
-              </div>
-            </div>
+            <SlideContent
+              idx={1}
+              img={assets.hero2}
+              activeIndex={activeIndex}
+            />
           </SwiperSlide>
+
           <SwiperSlide className="h-full bg-secondary/10 ">
-            <div className="flex items-center justify-between h-full w-full p-12 gap-4">
-              <div className="flex flex-col items-start justify-center w-1/2 h-full">
-                <h3 className="text-xl font-semibold mb-2 text-primary">
-                  Up To 50% Off
-                </h3>
-                <h2 className="text-3xl text-start font-bold mb-4 text-secondary">
-                  For Your First Goemart Shopping
-                </h2>
-                <p className="text-start text-text-secondary text-base">
-                  There are many variations of passages orem psum available but
-                  the majority have suffered alteration in some form by injected
-                  humour.
-                </p>
-              </div>
-              <div className="flex items-center justify-center h-100 w-100">
-                <img src={assets.hero3} alt="" />
-              </div>
-            </div>
+            <SlideContent
+              idx={2}
+              img={assets.hero3}
+              activeIndex={activeIndex}
+            />
           </SwiperSlide>
+
           <SwiperSlide className="h-full bg-secondary/10 ">
-            <div className="flex items-center justify-between h-full w-full p-12 gap-4">
-              <div className="flex flex-col items-start justify-center w-1/2 h-full">
-                <h3 className="text-xl font-semibold mb-2 text-primary">
-                  Up To 50% Off
-                </h3>
-                <h2 className="text-3xl text-start font-bold mb-4 text-secondary">
-                  For Your First Goemart Shopping
-                </h2>
-                <p className="text-start text-text-secondary text-base">
-                  There are many variations of passages orem psum available but
-                  the majority have suffered alteration in some form by injected
-                  humour.
-                </p>
-              </div>
-              <div className="flex items-center justify-center h-100 w-100">
-                <img src={assets.hero4} alt="" />
-              </div>
-            </div>
+            <SlideContent
+              idx={3}
+              img={assets.hero4}
+              activeIndex={activeIndex}
+            />
           </SwiperSlide>
         </Swiper>
       </div>

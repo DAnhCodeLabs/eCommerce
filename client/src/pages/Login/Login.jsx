@@ -4,7 +4,7 @@ import { Divider, Form, message } from "antd";
 import { motion, AnimatePresence } from "framer-motion";
 import { AuthHeader } from "./features/AuthHeader";
 import { useAuth } from "../../contexts/AuthContext";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import AuthForm from "./features/AuthForm";
 import { httpPost } from "../../services/httpService";
@@ -53,6 +53,7 @@ const Login = () => {
           response = await httpPost("/auth/login-account", {
             email: values.email,
             password: values.password,
+            type: "user",
           });
           if (response.success) {
             localStorage.setItem("token", response.token);

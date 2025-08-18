@@ -52,7 +52,7 @@ const Navbar = () => {
       ];
 
   return (
-    <div className="bg-white w-full py-4 shadow px-4">
+    <div className="bg-white w-full py-4 px-4">
       <div className="w-[95%] md:w-[1400px] mx-auto">
         {/* Top row */}
         <div className="flex items-center justify-between">

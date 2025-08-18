@@ -176,26 +176,32 @@ export const registerSeller = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, type } = req.body; // thêm type: "admin" | "user"
 
-    if (!email || !password) {
+    if (!email || !password || !type) {
       return res.json({
         success: false,
-        message: "Please enter complete information!",
+        message: "Please provide complete information (email, password, type)!",
       });
     }
 
     const adminEmail = process.env.ADMIN_EMAIL;
     const adminPassword = process.env.ADMIN_PASSWORD;
 
-    // Kiểm tra đăng nhập admin
-    if (email === adminEmail) {
-      const isAdminMatch = await bcrypt.compare(password, adminPassword);
+    // ===== LOGIN ADMIN =====
+    if (type === "admin") {
+      if (email !== adminEmail) {
+        return res.json({
+          success: false,
+          message: "Only admin accounts can log in here!",
+        });
+      }
 
+      const isAdminMatch = await bcrypt.compare(password, adminPassword);
       if (!isAdminMatch) {
         return res.json({
           success: false,
-          message: "Incorrect account or password, please check again",
+          message: "Incorrect admin account or password!",
         });
       }
 
@@ -214,6 +220,15 @@ export const login = async (req, res) => {
       });
     }
 
+    // ===== LOGIN USER / SELLER =====
+    if (email === adminEmail) {
+      // chặn login admin ở trang user
+      return res.json({
+        success: false,
+        message: "Admin accounts cannot log in from user page!",
+      });
+    }
+
     const account = await User.findOne({ email });
     if (!account) {
       return res.json({
@@ -225,16 +240,14 @@ export const login = async (req, res) => {
     if (!account.emailVerified) {
       return res.json({
         success: false,
-        message:
-          "Email not verified. Please check your email inbox for verification!",
+        message: "Email not verified. Please check your inbox!",
       });
     }
 
     if (account.isBlocked) {
       return res.json({
         success: false,
-        message:
-          "Your account is locked. Please contact the operator for processing!",
+        message: "Your account is locked. Please contact support!",
       });
     }
 
@@ -284,6 +297,7 @@ export const login = async (req, res) => {
     });
   }
 };
+
 
 export const verifyOtp = async (req, res) => {
   try {
