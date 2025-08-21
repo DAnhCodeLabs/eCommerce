@@ -34,7 +34,7 @@ const AuthForm = ({
             ]}
           />
           <InputField
-            type="number"
+            type="text"
             label={"Phone Number"}
             name={"phone"}
             required={true}

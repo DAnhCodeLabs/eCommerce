@@ -298,7 +298,6 @@ export const login = async (req, res) => {
   }
 };
 
-
 export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -756,6 +755,196 @@ export const deleteAddress = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to delete address. Please try again later.",
+    });
+  }
+};
+
+export const getAllUser = async (req, res) => {
+  try {
+    let {
+      page = 1,
+      limit = 10,
+      search = "",
+      role,
+      isBlocked,
+      emailVerified,
+    } = req.query;
+
+    page = parseInt(page) || 1;
+
+    const filter = {};
+
+    if (search) {
+      filter.$or = [
+        { username: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    if (role) filter.role = role;
+    if (isBlocked !== undefined) filter.isBlocked = isBlocked === "true";
+    if (emailVerified !== undefined)
+      filter.emailVerified = emailVerified === "true";
+
+    // Đếm tổng số user
+    const total = await User.countDocuments(filter);
+
+    let users;
+    if (limit === "all") {
+      // Lấy tất cả users
+      users = await User.find(filter)
+        .select("-password -otp -otpExpiry")
+        .sort({ createdAt: -1 });
+
+      limit = total; // gán limit bằng tổng số user
+      page = 1; // reset về trang 1
+    } else {
+      limit = parseInt(limit) || 10;
+      const skip = (page - 1) * limit;
+
+      users = await User.find(filter)
+        .select("-password -otp -otpExpiry")
+        .skip(skip)
+        .limit(limit)
+        .sort({ createdAt: -1 });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Get list of users successfully",
+      page,
+      limit,
+      total,
+      totalPages: limit === 0 ? 1 : Math.ceil(total / limit),
+      users,
+    });
+  } catch (error) {
+    console.error("Get all users error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while retrieving user list",
+    });
+  }
+};
+
+// userController.js
+
+export const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params; // Lấy userID từ URL
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required!",
+      });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found!",
+      });
+    }
+
+    await User.deleteOne({ _id: id });
+
+    return res.status(200).json({
+      success: true,
+      message: "User deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Delete user error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error. Failed to delete user.",
+    });
+  }
+};
+
+
+// Khóa tài khoản
+export const blockUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required."
+      });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found."
+      });
+    }
+
+    if (user.isBlocked) {
+      return res.status(400).json({
+        success: false,
+        message: "User is already blocked."
+      });
+    }
+
+    user.isBlocked = true;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "User has been blocked successfully."
+    });
+  } catch (error) {
+    console.error("blockUser Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while blocking user."
+    });
+  }
+};
+
+// Mở khóa tài khoản
+export const unblockUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required."
+      });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found."
+      });
+    }
+
+    if (!user.isBlocked) {
+      return res.status(400).json({
+        success: false,
+        message: "User is not blocked."
+      });
+    }
+
+    user.isBlocked = false;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "User has been unblocked successfully."
+    });
+  } catch (error) {
+    console.error("unblockUser Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error while unblocking user."
     });
   }
 };

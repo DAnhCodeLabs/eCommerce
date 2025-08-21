@@ -31,7 +31,9 @@ const InputField = ({
   disabled = false,
   allowClear = true,
   placeholder,
-  mode, // For select multiple
+  mode,
+  value, // Thêm prop value
+  onChange, // Thêm prop onChange
   ...rest
 }) => {
   const inputRules = [...rules];
@@ -49,7 +51,9 @@ const InputField = ({
       disabled,
       allowClear,
       placeholder,
-      className: `w-full !rounded-lg !px-4 !py-2 !text-sm !text-gray-700 ${className}`,
+      value, // Thêm value
+      onChange, // Thêm onChange
+      className: `w-full !text-sm !text-gray-700 ${className}`,
       ...rest,
     };
 
