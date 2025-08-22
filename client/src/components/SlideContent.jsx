@@ -89,7 +89,7 @@ const SlideContent = ({ idx, img, activeIndex }) => {
   }, [activeIndex, idx, controls]);
 
   return (
-    <div className="flex items-center justify-between h-full w-full p-12 gap-4 overflow-hidden">
+    <div className="flex items-center justify-between h-full w-full p-4 md:p-12 gap-4 overflow-hidden">
       <motion.div
         className="flex flex-col items-start justify-center w-1/2 h-full"
         variants={containerVariant}
@@ -104,14 +104,14 @@ const SlideContent = ({ idx, img, activeIndex }) => {
         </motion.h3>
 
         <motion.h2
-          className="text-3xl text-start font-bold mb-4 text-secondary"
+          className="md:text-3xl text-2xl text-start font-bold mb-4 text-secondary"
           variants={titleVariant}
         >
           For Your First Goemart Shopping
         </motion.h2>
 
         <motion.p
-          className="text-start text-text-secondary text-base"
+          className="text-start text-text-secondary text-base hidden md:block"
           variants={descVariant}
         >
           There are many variations of passages orem psum available but the
@@ -119,7 +119,7 @@ const SlideContent = ({ idx, img, activeIndex }) => {
         </motion.p>
       </motion.div>
 
-      <div className="flex items-center justify-center h-100 w-100">
+      <div className="flex items-center justify-center md:h-100 md:w-100 h-50 w-50">
         <motion.img
           src={img}
           alt=""

@@ -6,6 +6,8 @@ import Dashboard from "../features/Dashboard/Dashboard";
 import Login from "../pages/Login";
 import Users from "../features/Users/Users";
 import Categories from "../features/Categories/Categories";
+import Banner from "../features/Banner/Banner";
+import AddBanner from "../features/Banner/components/AddBanner";
 
 const ProtectedRoute = ({ token, redirectPath = "/login" }) => {
   const storedToken = localStorage.getItem("token"); // Kiểm tra token từ localStorage
@@ -26,6 +28,8 @@ const AppRouter = () => {
             <Route index element={<Dashboard />} />
             <Route path="users" element={<Users />} />
             <Route path="categories" element={<Categories />} />
+            <Route path="banner" element={<Banner />} />
+            <Route path="add-banner" element={<AddBanner />} />
           </Route>
         </Route>
         <Route path="/login" element={<Login />} />

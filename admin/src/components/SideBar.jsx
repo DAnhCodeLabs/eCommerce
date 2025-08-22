@@ -27,7 +27,7 @@ const SideBar = () => {
         },
         {
           key: "banners",
-          label: <Link to="/admin/banners">Quản lý Banners</Link>,
+          label: <Link to="/admin/banner">Quản lý Banners</Link>,
           icon: <FaProductHunt />,
         },
         {

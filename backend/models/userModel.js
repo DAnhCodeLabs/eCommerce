@@ -15,7 +15,7 @@ const addressSchema = new mongoose.Schema(
 
 const sellerInfoSchema = new mongoose.Schema(
   {
-    taxcode: { type: String, required: true }, 
+    taxcode: { type: String, required: true },
     dateOfIssue: { type: Date, required: true },
     ExpirationDate: { type: Date, required: true },
     PlaceOfGrant: { type: String, required: true },

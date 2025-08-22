@@ -10,14 +10,14 @@ import SlideContent from "./SlideContent";
 const Banner = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   return (
-    <div className="w-[1400px] mx-auto my-6 flex justify-center items-center gap-4">
+    <div className="w-[95%] md:w-[1400px] mx-auto mt-10 px-4 md:px-6 md:my-6 flex flex-col md:flex-row justify-center items-center gap-4">
       {/* Banner chính */}
-      <div className="w-2/3 rounded-2xl overflow-hidden h-120">
+      <div className="md:w-2/3 w-full rounded-2xl overflow-hidden md:h-120 h-60">
         <Swiper
           spaceBetween={30}
           centeredSlides={true}
           autoplay={{
-            delay: 2500,
+            delay: 3000,
             disableOnInteraction: false,
           }}
           pagination={{ clickable: true }}
@@ -60,7 +60,7 @@ const Banner = () => {
       </div>
 
       {/* Banner phụ bên phải */}
-      <div className="flex flex-col w-1/3 gap-4">
+      <div className="hidden md:flex md:flex-col md:w-1/3 w-full gap-4">
         {/* Banner 1 */}
         <div className="h-58 rounded-2xl overflow-hidden relative">
           <img
