@@ -5,7 +5,7 @@ import {
   getAllUser,
   unblockUser,
 } from "./user/userController.js";
-import { addBanner } from "./banner/banner.js";
+import { addBanner } from "./banner/bannerController.js";
 dotenv.config();
 
 export const adminGetAllUsers = getAllUser;
