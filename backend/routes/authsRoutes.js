@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  authGetBanners,
   changeUserPassword,
   createUserSellerAddress,
   deleteUserSellerAddress,
@@ -12,7 +13,6 @@ import {
   verifyUserOtp,
 } from "../controllers/authsController.js";
 import authorizeRole from "../middleware/authorizeRole.js";
-import { uploadSingleImage } from "../middleware/upload.js";
 
 const authRouter = express.Router();
 
@@ -22,6 +22,7 @@ authRouter.get(
   authorizeRole(["user", "seller"]),
   getUserSellerAddress
 );
+authRouter.get("/get-banners", authGetBanners);
 
 // POST routes
 authRouter.post("/login-account", loginAccount);

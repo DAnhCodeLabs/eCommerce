@@ -90,8 +90,9 @@ const AddBanner = () => {
     },
     {
       name: "startDate",
-      label: "Star tDate",
-      type: "date",
+      label: "Start Date",
+      type: "datetime",
+      ShowTime: true,
       placeholder: "Enter banner start date",
       rules: [{ required: true, message: "Start date is required" }],
       colSpan: 12,
@@ -99,7 +100,8 @@ const AddBanner = () => {
     {
       name: "endDate",
       label: "End Date",
-      type: "date",
+      type: "datetime",
+      ShowTime: true,
       placeholder: "Select end date",
       rules: [
         { required: true, message: "End date is required" },

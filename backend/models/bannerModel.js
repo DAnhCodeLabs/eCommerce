@@ -2,27 +2,11 @@ import mongoose from "mongoose";
 
 const bannerSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-    },
-    subTitle: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    isActive: {
-      type: Boolean,
-      default: true,
-    },
-    startDate: {
-      type: Date,
-      default: Date.now,
-      required: true,
-    },
+    title: { type: String, required: true },
+    subTitle: { type: String, required: true },
+    description: { type: String, required: true },
+    isActive: { type: Boolean, default: true },
+    startDate: { type: Date, default: Date.now, required: true },
     endDate: {
       type: Date,
       validate: {
@@ -32,52 +16,51 @@ const bannerSchema = new mongoose.Schema(
         message: "End date must be after start date",
       },
     },
-    image: {
-      type: String,
-      required: true,
-    },
+    image: { type: String, required: true },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-bannerSchema.pre("save", function (next) {
-  const now = new Date();
-  this.isActive = true;
+const Banner = mongoose.model("Banner", bannerSchema);
 
-  if (this.endDate && now > this.endDate) {
-    this.isActive = false;
-  }
-  if (this.startDate && now < this.startDate) {
-    this.isActive = false;
-  }
-
-  next();
-});
-
-async function updateBannerStatus() {
+/**
+ * Hàm auto cập nhật trạng thái banner
+ * - Nếu chưa tới startDate  → inactive
+ * - Nếu đang trong khoảng   → active
+ * - Nếu quá endDate         → inactive
+ */
+export async function autoUpdateBannerStatus() {
   const now = new Date();
 
-  await Banner.updateMany(
-    {
-      startDate: { $lte: now },
-      endDate: { $gt: now },
-      isActive: false,
-    },
-    { isActive: true }
-  );
+  try {
+    // Active những banner đủ điều kiện
+    await Banner.updateMany(
+      {
+        startDate: { $lte: now },
+        $or: [{ endDate: null }, { endDate: { $gt: now } }],
+        isActive: false,
+      },
+      { isActive: true }
+    );
 
-  await Banner.updateMany(
-    {
-      endDate: { $lte: now },
-      isActive: true,
-    },
-    { isActive: false }
-  );
+    // Inactive những banner đã hết hạn hoặc chưa tới ngày bắt đầu
+    await Banner.updateMany(
+      {
+        $or: [
+          { endDate: { $lte: now } }, // hết hạn
+          { startDate: { $gt: now } }, // chưa tới ngày
+        ],
+        isActive: true,
+      },
+      { isActive: false }
+    );
+  } catch (err) {
+    console.error("Error auto updating banner status:", err);
+  }
 }
 
-setInterval(updateBannerStatus, 60000);
+// Chạy mỗi phút
+setInterval(autoUpdateBannerStatus, 60 * 1000);
 
-const Banner = mongoose.model("Banner", bannerSchema);
-export default Banner;
+export { Banner };        // ✅ Named export
+export default Banner;    // vẫn giữ default export cho tương thích

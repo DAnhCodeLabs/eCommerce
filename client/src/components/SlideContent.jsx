@@ -37,8 +37,8 @@ const titleVariant = {
       damping: 15,
       mass: 0.8,
       velocity: 0,
-      restDelta: 0.001, // Giảm ngưỡng dừng để mượt hơn
-      restSpeed: 0.001, // Giảm tốc độ dừng
+      restDelta: 0.001,
+      restSpeed: 0.001,
     },
   },
 };
@@ -74,14 +74,20 @@ const imageVariant = {
   },
 };
 
-const SlideContent = ({ idx, img, activeIndex }) => {
+const SlideContent = ({
+  idx,
+  img,
+  title,
+  subTitle,
+  description,
+  activeIndex,
+}) => {
   const controls = useAnimation();
 
   useEffect(() => {
     if (activeIndex === idx) {
       controls.start("visible");
     } else {
-      // Thêm transition mượt khi ẩn đi
       controls.start("hidden", {
         transition: { duration: 0.3, ease: "easeInOut" },
       });
@@ -96,34 +102,52 @@ const SlideContent = ({ idx, img, activeIndex }) => {
         initial="hidden"
         animate={controls}
       >
-        <motion.h3
-          className="text-xl font-semibold mb-2 text-primary"
-          variants={subtitleVariant}
-        >
-          Up To 50% Off
-        </motion.h3>
+        {/* Hiển thị subTitle từ banner nếu có */}
+        {subTitle && (
+          <motion.h3
+            className="text-xl font-semibold mb-2 text-primary"
+            variants={subtitleVariant}
+          >
+            {subTitle}
+          </motion.h3>
+        )}
 
-        <motion.h2
-          className="md:text-3xl text-2xl text-start font-bold mb-4 text-secondary"
-          variants={titleVariant}
-        >
-          For Your First Goemart Shopping
-        </motion.h2>
+        {/* Hiển thị title từ banner nếu có */}
+        {title && (
+          <motion.h2
+            className="md:text-3xl text-2xl text-start font-bold mb-4 text-secondary"
+            variants={titleVariant}
+          >
+            {title}
+          </motion.h2>
+        )}
 
-        <motion.p
-          className="text-start text-text-secondary text-base hidden md:block"
+        {/* Hiển thị description từ banner nếu có */}
+        {description && (
+          <motion.p
+            className="text-start text-text-secondary text-base hidden md:block max-w-md"
+            variants={descVariant}
+          >
+            {description}
+          </motion.p>
+        )}
+
+        {/* Nút CTA mặc định */}
+        <motion.button
+          className="bg-primary hover:bg-primary-dark text-white font-semibold py-2 px-6 rounded-full transition-colors mt-4"
           variants={descVariant}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          There are many variations of passages orem psum available but the
-          majority have suffered alteration in some form by injected humour.
-        </motion.p>
+          Shop Now
+        </motion.button>
       </motion.div>
 
       <div className="flex items-center justify-center md:h-100 md:w-100 h-50 w-50">
         <motion.img
           src={img}
-          alt=""
-          className="max-w-full h-auto will-change-transform"
+          alt={title || `Banner ${idx + 1}`}
+          className="max-w-full h-auto will-change-transform object-contain"
           variants={imageVariant}
           initial="hidden"
           animate={controls}

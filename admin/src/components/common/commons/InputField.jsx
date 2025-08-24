@@ -121,6 +121,7 @@ const InputField = ({
           <DatePicker
             {...baseProps}
             className={`${baseProps.className} !w-full`}
+            format="YYYY-MM-DD"
           />
         );
       case "time":
@@ -134,7 +135,11 @@ const InputField = ({
         return (
           <DatePicker
             {...baseProps}
-            showTime
+            showTime={{
+              format: "HH:mm",
+              minuteStep: 15,
+            }}
+            format="YYYY-MM-DD HH:mm"
             className={`${baseProps.className} !w-full`}
           />
         );

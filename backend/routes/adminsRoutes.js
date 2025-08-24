@@ -5,7 +5,10 @@ import {
   adminBlockUser,
   adminDeleteUser,
   adminGetAllUsers,
+  adminGetBanners,
+  adminGetDetailsBanner,
   adminUnBlockUser,
+  adminUpdateBanner,
 } from "../controllers/adminsController.js";
 import { uploadSingleImage } from "../middleware/upload.js";
 
@@ -13,6 +16,12 @@ const adminRouter = express.Router();
 
 //GET
 adminRouter.get("/users", authorizeRole(["admin"]), adminGetAllUsers);
+adminRouter.get("/banners", authorizeRole(["admin"]), adminGetBanners);
+adminRouter.get(
+  "/banners/:id",
+  authorizeRole(["admin"]),
+  adminGetDetailsBanner
+);
 //POST
 adminRouter.post(
   "/add-banner",
@@ -28,6 +37,11 @@ adminRouter.patch(
   adminUnBlockUser
 );
 //PUT
+adminRouter.put(
+  "/update-banner/:id",
+  authorizeRole(["admin"]),
+  adminUpdateBanner
+);
 //DELETE
 adminRouter.delete(
   "/delete-user/:id",
