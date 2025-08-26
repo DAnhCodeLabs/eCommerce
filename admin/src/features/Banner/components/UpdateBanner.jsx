@@ -47,9 +47,7 @@ const UpdateBanner = () => {
       form.setFieldsValue(formData);
     } catch (error) {
       console.error("Error fetching banner details:", error);
-      message.error(
-        error.response?.data?.message || "Failed to load banner details"
-      );
+      message.error(error.response?.data?.message);
       navigate("/admin/banner");
     } finally {
       setInitialLoading(false);
@@ -74,7 +72,7 @@ const UpdateBanner = () => {
       );
 
       if (response.message) {
-        message.success(response.message || "Banner updated successfully");
+        message.success(response.message);
         navigate("/admin/banner");
       } else {
         message.error(response.error || "Failed to update banner");

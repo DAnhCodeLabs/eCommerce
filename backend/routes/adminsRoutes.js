@@ -2,11 +2,15 @@ import express from "express";
 import authorizeRole from "../middleware/authorizeRole.js";
 import {
   adminAddBanner,
+  adminAddCategory,
+  adminAddSubCategory,
   adminBlockUser,
+  adminDeleteBanner,
   adminDeleteUser,
   adminGetAllUsers,
   adminGetBanners,
   adminGetDetailsBanner,
+  adminGetParentCategories,
   adminUnBlockUser,
   adminUpdateBanner,
 } from "../controllers/adminsController.js";
@@ -22,12 +26,28 @@ adminRouter.get(
   authorizeRole(["admin"]),
   adminGetDetailsBanner
 );
+adminRouter.get(
+  "/parent-categories",
+  authorizeRole(["admin"]),
+  adminGetParentCategories
+);
 //POST
 adminRouter.post(
   "/add-banner",
   authorizeRole(["admin"]),
   uploadSingleImage("banners"),
   adminAddBanner
+);
+adminRouter.post(
+  "/add-category",
+  authorizeRole(["admin"]),
+  uploadSingleImage("categories"),
+  adminAddCategory
+);
+adminRouter.post(
+  "/add-subcategory",
+  authorizeRole(["admin"]),
+  adminAddSubCategory
 );
 //PATCH
 adminRouter.patch("/block-user/:id", authorizeRole(["admin"]), adminBlockUser);
@@ -47,5 +67,10 @@ adminRouter.delete(
   "/delete-user/:id",
   authorizeRole(["admin"]),
   adminDeleteUser
+);
+adminRouter.delete(
+  "/delete-banner/:id",
+  authorizeRole(["admin"]),
+  adminDeleteBanner
 );
 export default adminRouter;

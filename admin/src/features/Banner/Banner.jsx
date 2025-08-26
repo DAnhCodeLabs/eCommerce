@@ -78,34 +78,42 @@ const Banner = () => {
     fetchBanners(params);
   };
 
-  // Handle form value changes - auto filter
   const handleFormChange = () => {
-    // Reset to page 1 when filters change
     setPagination({ ...pagination, current: 1 });
-
-    // Debounce to avoid too many API calls
     clearTimeout(window.filterTimeout);
     window.filterTimeout = setTimeout(() => {
       fetchBanners({ current: 1 });
     }, 500);
   };
 
-  // Handle reset filters
   const handleReset = () => {
     form.resetFields();
     setPagination({ ...pagination, current: 1 });
     fetchBanners({ current: 1 });
   };
 
-  // Handle delete banner
   const handleDelete = async (id) => {
+    setLoading(true);
     try {
-      await httpDelete(`/admin/banners/${id}`);
-      message.success("Banner deleted successfully");
-      fetchBanners();
+      const response = await httpDelete(`/admin/delete-banner/${id}`);
+
+      message.success(response.message);
+      fetchBanners({
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+      });
     } catch (error) {
       console.error("Error deleting banner:", error);
-      message.error("Failed to delete banner");
+
+      if (error.response?.status === 404) {
+        message.error("Banner not found");
+      } else if (error.response?.status === 400) {
+        message.error("Invalid banner ID");
+      } else {
+        message.error("Failed to delete banner");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 

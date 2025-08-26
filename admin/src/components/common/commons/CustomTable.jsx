@@ -44,7 +44,7 @@ const CustomTable = ({
     return {
       showSizeChanger: true,
       showQuickJumper: true,
-      pageSizeOptions: ["10", "20", "50", "100"],
+      pageSizeOptions: ["1", "20", "50", "100"],
       showTotal: (total) => `Tổng ${total} bản ghi`,
       ...(typeof pagination === "object" ? pagination : {}),
     };

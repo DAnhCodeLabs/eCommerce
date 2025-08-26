@@ -101,7 +101,7 @@ const Users = () => {
       pageSize: newPagination.pageSize,
     });
   };
-
+ 
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
     setPagination((prev) => ({ ...prev, current: 1 }));
@@ -233,7 +233,6 @@ const Users = () => {
 
       if (response.success) {
         message.success(response.message);
-        // Refresh the user list
         fetchUsers({
           current: pagination.current,
           pageSize: pagination.pageSize,

@@ -1,3 +1,4 @@
+import { cloudinary } from "../../config/cloudinary.js";
 import { Banner, autoUpdateBannerStatus } from "../../models/bannerModel.js";
 import mongoose from "mongoose";
 
@@ -197,12 +198,10 @@ export const updateBanner = async (req, res) => {
     if (description !== undefined) updateData.description = description;
     if (image !== undefined) updateData.image = image;
 
-    // ✅ Ưu tiên giá trị isActive từ client
     if (isActive !== undefined) {
       updateData.isActive = isActive === "true" || isActive === true;
     }
 
-    // Xử lý dates
     let newStartDate = existingBanner.startDate;
     let newEndDate = existingBanner.endDate;
 
@@ -222,7 +221,6 @@ export const updateBanner = async (req, res) => {
       });
     }
 
-    // ✅ Chỉ auto set isActive nếu client không gửi
     if (isActive === undefined) {
       const now = new Date();
       updateData.isActive = true;
@@ -230,7 +228,6 @@ export const updateBanner = async (req, res) => {
       if (newEndDate && newEndDate < now) updateData.isActive = false;
     }
 
-    // Cập nhật và lưu
     const bannerToUpdate = await Banner.findById(id);
     Object.assign(bannerToUpdate, updateData);
 
@@ -259,5 +256,44 @@ export const updateBanner = async (req, res) => {
     res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
+  }
+};
+
+export const deleteBanner = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid banner ID format" });
+    }
+
+    const banner = await Banner.findById(id);
+    if (!banner) {
+      return res.status(404).json({ message: "Banner not found" });
+    }
+
+    if (banner.image) {
+      try {
+        const parts = banner.image.split("/");
+        const fileName = parts[parts.length - 1];
+        const publicId = fileName.split(".")[0];
+
+        await cloudinary.uploader.destroy(`banners/${publicId}`);
+      } catch (err) {
+        console.error("Error deleting image from Cloudinary:", err.message);
+      }
+    }
+
+    await Banner.findByIdAndDelete(id);
+
+    res.status(200).json({
+      message: "Banner deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting banner:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };

@@ -10,6 +10,7 @@ import Banner from "../features/Banner/Banner";
 import AddBanner from "../features/Banner/components/AddBanner";
 import BannerDetails from "../features/Banner/components/BannerDetails";
 import UpdateBanner from "../features/Banner/components/UpdateBanner";
+import AddCategory from "../features/Categories/components/AddCategory";
 
 const ProtectedRoute = ({ token, redirectPath = "/login" }) => {
   const storedToken = localStorage.getItem("token"); // Kiểm tra token từ localStorage
@@ -34,6 +35,7 @@ const AppRouter = () => {
             <Route path="add-banner" element={<AddBanner />} />
             <Route path="banner-details/:id" element={<BannerDetails />} />
             <Route path="banner-update/:id" element={<UpdateBanner />} />
+            <Route path="add-category" element={<AddCategory />} />
           </Route>
         </Route>
         <Route path="/login" element={<Login />} />

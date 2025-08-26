@@ -14,11 +14,7 @@ const AddBanner = () => {
   const onFinish = async (values) => {
     try {
       setLoading(true);
-
-      // Tạo FormData để gửi file ảnh
       const formData = new FormData();
-
-      // Thêm các trường dữ liệu vào FormData
       formData.append("title", values.title);
       formData.append("subTitle", values.subTitle);
       formData.append("description", values.description);
@@ -36,16 +32,13 @@ const AddBanner = () => {
       if (values.image && values.image.length > 0) {
         formData.append("image", values.image[0].originFileObj);
       }
-
-      // Gọi API thêm banner
       const response = await httpPost("/admin/add-banner", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      // Hiển thị thông báo thành công
-      message.success(response.message || "Banner added successfully");
+      message.success(response.message);
 
       // Quay lại trang quản lý banner
       navigate("/admin/banner");
@@ -84,7 +77,7 @@ const AddBanner = () => {
     {
       name: "description",
       label: "Description",
-      type: "text",
+      type: "textarea",
       placeholder: "Enter banner description",
       rules: [{ required: true, message: "Description is required" }],
     },
