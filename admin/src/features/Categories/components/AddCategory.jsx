@@ -1,32 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BreadcrumbHeader from "../../../components/BreadcrumbHeader";
 import CustomForm from "../../../components/common/commons/CustomForm";
 import { Form, message } from "antd";
 import CommonButton from "../../../components/common/commons/CommonButton";
-import { useNavigate } from "react-router-dom";
-import { httpPost } from "../../../services/httpService";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { httpGet, httpPost } from "../../../services/httpService";
 
 const AddCategory = () => {
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [isSubcategory, setIsSubcategory] = useState(false);
+  const [parentCategories, setParentCategories] = useState([]);
 
+  useEffect(() => {
+    const type = searchParams.get("type");
+    setIsSubcategory(type === "subcategory");
+
+    if (type === "subcategory") {
+      fetchParentCategories();
+    }
+  }, [searchParams]);
+
+  const fetchParentCategories = async () => {
+    try {
+      const response = await httpGet("/admin/parent-categories");
+      setParentCategories(response.parentCategories);
+    } catch (error) {
+      console.error("Error fetching parent categories:", error);
+      message.error("Failed to load parent categories");
+    }
+  };
   const onFinish = async (values) => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("name", values.name);
-      formData.append("description", values.description || "");
-      formData.append("isActive", values.isActive);
-      if (values.image && values.image.length > 0) {
-        formData.append("image", values.image[0].originFileObj);
+      if (isSubcategory) {
+        formData.append("name", values.name);
+        formData.append("parentId", values.parentId);
+        formData.append("description", values.description || "");
+
+        const response = await httpPost("/admin/add-subcategory", {
+          name: values.name,
+          parentId: values.parentId,
+          description: values.description || "",
+        });
+        message.success(response.message);
+      } else {
+        formData.append("name", values.name);
+        formData.append("description", values.description || "");
+        formData.append("isActive", values.isActive || false);
+        if (values.image && values.image.length > 0) {
+          formData.append("image", values.image[0].originFileObj);
+        }
+
+        const response = await httpPost("/admin/add-category", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        message.success(response.message);
       }
-      const response = await httpPost("/admin/add-category", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      message.success(response.message);
+
       navigate("/admin/categories");
     } catch (error) {
       console.error("Error adding banner:", error);
@@ -42,14 +78,38 @@ const AddCategory = () => {
   const handleCancel = () => {
     navigate("/admin/categories");
   };
-  const formItems = [
+  const baseFormItems = [
     {
       name: "name",
-      label: "Category Name",
+      label: isSubcategory ? "Subcategory Name" : "Category Name",
       type: "text",
-      rules: [{ required: true, message: "Please enter category name" }],
-      placeholder: "Enter category name",
+      rules: [
+        {
+          required: true,
+          message: `Please enter ${
+            isSubcategory ? "subcategory" : "category"
+          } name`,
+        },
+      ],
+      placeholder: `Enter ${isSubcategory ? "subcategory" : "category"} name`,
     },
+  ];
+
+  const subcategoryFormItems = [
+    {
+      name: "parentId",
+      label: "Parent Category",
+      type: "select",
+      options: parentCategories.map((cat) => ({
+        value: cat._id,
+        label: cat.name,
+      })),
+      rules: [{ required: true, message: "Please select a parent category" }],
+      placeholder: "Select parent category",
+    },
+  ];
+
+  const categoryFormItems = [
     {
       name: "description",
       label: "Description",
@@ -59,7 +119,7 @@ const AddCategory = () => {
     },
     {
       name: "image",
-      label: "Image URL",
+      label: "Image",
       type: "upload",
       listType: "picture-card",
       acceptType: "image",
@@ -72,9 +132,14 @@ const AddCategory = () => {
       label: "Active Status",
       type: "checkbox",
       rules: [{ required: false }],
-      initialValue: true,
+      initialValue: false,
     },
   ];
+
+  const formItems = isSubcategory
+    ? [...baseFormItems, ...subcategoryFormItems]
+    : [...baseFormItems, ...categoryFormItems];
+
   return (
     <div className="flex flex-col gap-4">
       <div className="px-6 py-4 bg-white rounded-xl">
@@ -83,7 +148,7 @@ const AddCategory = () => {
           breadcrumbItems={[
             { title: "Dashboard", href: "/admin" },
             { title: "Categories", href: "/admin/categories" },
-            { title: "Add Category" },
+            { title: isSubcategory ? "Add Subcategory" : "Add Category" },
           ]}
         />
       </div>
@@ -101,7 +166,7 @@ const AddCategory = () => {
               loading={loading}
               {...props}
             >
-              Create
+              {isSubcategory ? "Create Subcategory" : "Create Category"}
             </CommonButton>
           )}
           cancelButtonComponent={(props) => (

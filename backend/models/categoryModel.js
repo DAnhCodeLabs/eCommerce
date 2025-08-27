@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
-const makeSlug = (name = "") =>
+const slugify = (name = "") =>
   name
     .toLowerCase()
     .replace(/[^a-z0-9 -]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
     .trim();
+
 const categorySchema = new mongoose.Schema(
   {
     name: {
@@ -31,7 +32,7 @@ const categorySchema = new mongoose.Schema(
     },
     isActive: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     image: {
       type: String,
@@ -43,32 +44,42 @@ const categorySchema = new mongoose.Schema(
   }
 );
 
-categorySchema.pre("save", function (next) {
+categorySchema.pre("save", async function (next) {
   if (this.isModified("name") || !this.slug) {
-    this.slug = makeSlug(this.name);
+    const base = slugify(this.name);
+    let slugCandidate = base;
+    let count = 0;
+
+    while (
+      await this.constructor.findOne({
+        slug: slugCandidate,
+        _id: { $ne: this._id },
+      })
+    ) {
+      count += 1;
+      slugCandidate = `${base}-${count}`;
+    }
+
+    this.slug = slugCandidate;
   }
   next();
 });
 
-// Lấy tất cả danh mục con trực tiếp
 categorySchema.virtual("children", {
   ref: "Category",
   localField: "_id",
   foreignField: "parent",
 });
 
-// Static method: Lấy danh mục theo cấu trúc phân cấp
 categorySchema.statics.getHierarchy = async function () {
-  const categories = await this.find({ isActive: true })
+  const categories = await this.find()
     .populate("parent", "name")
     .populate("children", "name slug")
     .sort({ name: 1 });
 
-  // Tách danh mục cha và con
   const parentCategories = categories.filter((cat) => !cat.parent);
   const childCategories = categories.filter((cat) => cat.parent);
 
-  // Gán danh mục con vào danh mục cha
   parentCategories.forEach((parent) => {
     parent.children = childCategories.filter(
       (child) =>
@@ -79,28 +90,22 @@ categorySchema.statics.getHierarchy = async function () {
   return parentCategories;
 };
 
-// Static method: Lấy tất cả danh mục con của một danh mục
 categorySchema.statics.getChildren = async function (parentId) {
   return await this.find({
     parent: parentId,
-    isActive: true,
   }).sort({ name: 1 });
 };
 
-// Static method: Lấy tất cả danh mục gốc (không có parent)
 categorySchema.statics.getRootCategories = async function () {
   return await this.find({
     parent: null,
-    isActive: true,
   }).sort({ name: 1 });
 };
 
-// Instance method: Kiểm tra có phải danh mục gốc
 categorySchema.methods.isRoot = function () {
   return !this.parent;
 };
 
-// Instance method: Kiểm tra có phải danh mục con
 categorySchema.methods.hasParent = function () {
   return !!this.parent;
 };

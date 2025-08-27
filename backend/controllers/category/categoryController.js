@@ -1,16 +1,8 @@
 import Category from "../../models/categoryModel.js";
 
-const makeSlug = (name = "") =>
-  name
-    .toLowerCase()
-    .replace(/[^a-z0-9 -]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .trim();
-
 export const addCategory = async (req, res) => {
   try {
-    const { name, description } = req.body;
+    const { name, description, isActive } = req.body;
 
     const existingCategory = await Category.findOne({
       name: name,
@@ -26,6 +18,7 @@ export const addCategory = async (req, res) => {
     const newCategory = new Category({
       name,
       description: description || "",
+      isActive: isActive === "true" || isActive === true,
       image: req.file ? req.file.path : null,
     });
 
@@ -47,7 +40,7 @@ export const addCategory = async (req, res) => {
 
 export const addSubCategory = async (req, res) => {
   try {
-    const { name, description, parentId } = req.body;
+    const { name, parentId } = req.body;
 
     if (!name || !parentId) {
       return res.status(400).json({
@@ -64,8 +57,6 @@ export const addSubCategory = async (req, res) => {
       });
     }
 
-    const slug = makeSlug(name);
-
     const existingCategory = await Category.findOne({
       name: name,
       parent: parentId,
@@ -80,7 +71,6 @@ export const addSubCategory = async (req, res) => {
 
     const newSubCategory = new Category({
       name,
-      description: description || "",
       parent: parentId,
     });
 
@@ -104,7 +94,6 @@ export const getParentCategories = async (req, res) => {
   try {
     const parentCategories = await Category.find({
       parent: null,
-      isActive: true,
     }).select("name _id");
 
     res.status(200).json({

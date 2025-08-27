@@ -18,9 +18,16 @@ const Categories = () => {
       <div className="bg-white rounded-xl p-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold">Banner List</h3>
-          <CommonButton type="primary">
-            <Link to={"/admin/add-category"}>Add Banner</Link>
-          </CommonButton>
+          <div className="flex gap-2">
+            <CommonButton type="primary">
+              <Link to={"/admin/add-category?type=category"}>Add Category</Link>
+            </CommonButton>
+            <CommonButton type="primary">
+              <Link to={"/admin/add-category?type=subcategory"}>
+                Add Subcategory
+              </Link>
+            </CommonButton>
+          </div>
         </div>
       </div>
     </div>
