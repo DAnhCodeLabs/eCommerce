@@ -15,6 +15,7 @@ import {
 import {
   addCategory,
   addSubCategory,
+  getCategoriesTree,
   getParentCategories,
 } from "./category/categoryController.js";
 dotenv.config();
@@ -31,3 +32,4 @@ export const adminDeleteBanner = deleteBanner;
 export const adminAddCategory = addCategory;
 export const adminAddSubCategory = addSubCategory;
 export const adminGetParentCategories = getParentCategories;
+export const adminGetCategoriesTree = getCategoriesTree;

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   authGetBanners,
+  authGetCategoriesList,
   changeUserPassword,
   createUserSellerAddress,
   deleteUserSellerAddress,
@@ -23,6 +24,7 @@ authRouter.get(
   getUserSellerAddress
 );
 authRouter.get("/get-banners", authGetBanners);
+authRouter.get("/get-categories", authGetCategoriesList);
 
 // POST routes
 authRouter.post("/login-account", loginAccount);

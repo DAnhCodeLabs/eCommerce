@@ -45,12 +45,14 @@ const AddCategory = () => {
           name: values.name,
           parentId: values.parentId,
           description: values.description || "",
+          isEnabled: values.isEnabled || false,
         });
         message.success(response.message);
       } else {
         formData.append("name", values.name);
         formData.append("description", values.description || "");
         formData.append("isActive", values.isActive || false);
+        formData.append("isEnabled", values.isEnabled || false);
         if (values.image && values.image.length > 0) {
           formData.append("image", values.image[0].originFileObj);
         }
@@ -107,6 +109,14 @@ const AddCategory = () => {
       rules: [{ required: true, message: "Please select a parent category" }],
       placeholder: "Select parent category",
     },
+    {
+      name: "isEnabled",
+      label: "Enabled Category",
+      type: "checkbox",
+      rules: [{ required: false }],
+      initialValue: false,
+      valuePropName: "checked",
+    },
   ];
 
   const categoryFormItems = [
@@ -133,6 +143,15 @@ const AddCategory = () => {
       type: "checkbox",
       rules: [{ required: false }],
       initialValue: false,
+      valuePropName: "checked",
+    },
+    {
+      name: "isEnabled",
+      label: "Enabled Category",
+      type: "checkbox",
+      rules: [{ required: false }],
+      initialValue: false,
+      valuePropName: "checked",
     },
   ];
 

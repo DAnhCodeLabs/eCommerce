@@ -9,6 +9,7 @@ import {
   adminDeleteUser,
   adminGetAllUsers,
   adminGetBanners,
+  adminGetCategoriesTree,
   adminGetDetailsBanner,
   adminGetParentCategories,
   adminUnBlockUser,
@@ -30,6 +31,11 @@ adminRouter.get(
   "/parent-categories",
   authorizeRole(["admin"]),
   adminGetParentCategories
+);
+adminRouter.get(
+  "/categories-tree",
+  authorizeRole(["admin"]),
+  adminGetCategoriesTree
 );
 //POST
 adminRouter.post(

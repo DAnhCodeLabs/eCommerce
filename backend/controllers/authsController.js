@@ -12,6 +12,7 @@ import {
   verifyOtp,
 } from "./user/userController.js";
 import { getBannersForUser } from "./banner/bannerController.js";
+import { getCategoriesList } from "./category/categoryController.js";
 
 // Load biến môi trường
 dotenv.config();
@@ -27,4 +28,5 @@ export const createUserSellerAddress = createAddress;
 export const updateUserSellerAddress = updateAddress;
 export const getUserSellerAddress = getAddress;
 export const deleteUserSellerAddress = deleteAddress;
-export const authGetBanners = getBannersForUser
+export const authGetBanners = getBannersForUser;
+export const authGetCategoriesList = getCategoriesList;

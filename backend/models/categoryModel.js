@@ -34,6 +34,10 @@ const categorySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isEnabled: {
+      type: Boolean,
+      default: true,
+    },
     image: {
       type: String,
       default: null,

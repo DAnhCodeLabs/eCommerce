@@ -2,6 +2,7 @@ import React from "react";
 import BreadcrumbHeader from "../../components/BreadcrumbHeader";
 import CommonButton from "../../components/common/commons/CommonButton";
 import { Link } from "react-router-dom";
+import CategoriesTree from "./components/CategoriesTree";
 
 const Categories = () => {
   return (
@@ -29,6 +30,9 @@ const Categories = () => {
             </CommonButton>
           </div>
         </div>
+      </div>
+      <div>
+        <CategoriesTree />
       </div>
     </div>
   );
