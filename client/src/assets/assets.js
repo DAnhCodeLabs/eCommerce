@@ -13,8 +13,16 @@ import shipping from "./411763.png";
 import refund from "./1611179.png";
 import discount from "./3258497.png";
 import support2 from "./9368849.png";
+import topCategory from "./9740968.png";
+import trendingItems from "./8140054.png";
+import hotItems from "./3164849.png";
+import newArrivals from "./2940936.png";
 
 export const assets = {
+  topCategory,
+  trendingItems,
+  hotItems,
+  newArrivals,
   logo,
   loginImg,
   saleOnline,

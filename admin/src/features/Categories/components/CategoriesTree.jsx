@@ -13,6 +13,7 @@ import {
 import InputField from "../../../components/common/commons/InputField";
 import CommonButton from "../../../components/common/commons/CommonButton";
 import { httpGet, httpDelete } from "../../../services/httpService";
+import EditCategoryModal from "./EditCategoryModal";
 
 const CategoriesTree = () => {
   const [categories, setCategories] = useState([]);
@@ -20,6 +21,18 @@ const CategoriesTree = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [detailModalVisible, setDetailModalVisible] = useState(false);
   const [deleteConfirmVisible, setDeleteConfirmVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [editingCategory, setEditingCategory] = useState(null);
+  const handleEdit = (category) => {
+    setEditingCategory(category);
+    setEditModalVisible(true);
+  };
+
+  // Thêm hàm xử lý thành công
+  const handleEditSuccess = () => {
+    fetchCategories(); // Refresh data
+  };
+
   const [searchParams, setSearchParams] = useState({
     search: "",
     isActive: "",
@@ -167,10 +180,6 @@ const CategoriesTree = () => {
     setDetailModalVisible(true);
   };
 
-  const handleEdit = (category) => {
-    message.info(`Edit functionality for: ${category.name}`);
-    // Implement edit functionality here
-  };
 
   const handleDelete = (category) => {
     setSelectedCategory(category);
@@ -215,6 +224,13 @@ const CategoriesTree = () => {
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
+      <EditCategoryModal
+        category={editingCategory}
+        visible={editModalVisible}
+        onCancel={() => setEditModalVisible(false)}
+        onSuccess={handleEditSuccess}
+      />
+
       <Card
         title={
           <div className="flex items-center">

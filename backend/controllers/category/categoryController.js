@@ -95,7 +95,8 @@ export const addSubCategory = async (req, res) => {
 export const getParentCategories = async (req, res) => {
   try {
     const parentCategories = await Category.find({
-      parent: null, isEnabled: true
+      parent: null,
+      isEnabled: true,
     }).select("name _id");
 
     res.status(200).json({
@@ -155,6 +156,12 @@ export const getCategoriesTree = async (req, res) => {
                 isActive: 1,
                 isEnabled: 1,
                 _id: 1,
+                parent: 1, // thêm parent để frontend biết child có parent
+                description: 1,
+                createdAt: 1,
+                updatedAt: 1,
+                slug: 1,
+                image: 1,
               },
             },
             { $sort: { name: 1 } },
@@ -168,6 +175,11 @@ export const getCategoriesTree = async (req, res) => {
           isActive: 1,
           isEnabled: 1,
           children: 1,
+          description: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          slug: 1,
+          image: 1,
         },
       },
       { $sort: { [sortBy]: sortDirection } },
@@ -234,6 +246,7 @@ export const getCategoriesList = async (req, res) => {
           name: 1,
           itemCount: { $size: "$children" },
           isActive: 1,
+          image: 1,
         },
       },
       { $sort: { isActive: -1, name: 1 } },
@@ -252,3 +265,143 @@ export const getCategoriesList = async (req, res) => {
   }
 };
 
+export const updateCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description, parent, isActive, isEnabled } = req.body;
+
+    const category = await Category.findById(id);
+    if (!category) {
+      return res.status(404).json({
+        success: false,
+        message: "Danh mục không tồn tại",
+      });
+    }
+
+    // Kiểm tra xem category hiện tại có phải là subcategory không
+    const isCurrentlySubcategory = !!category.parent;
+
+    // Chỉ validate parent nếu đang chỉnh sửa subcategory
+    if (isCurrentlySubcategory) {
+      const parentProvided = typeof parent !== "undefined";
+      const parentToCheck = parentProvided
+        ? parent || null
+        : category.parent || null;
+
+      // Validate unique name within the same parent
+      if (name && name.trim() !== category.name) {
+        const existingCategory = await Category.findOne({
+          name: name.trim(),
+          parent: parentToCheck,
+          _id: { $ne: id },
+        });
+
+        if (existingCategory) {
+          return res.status(400).json({
+            success: false,
+            message: "Tên danh mục đã tồn tại trong cùng danh mục cha",
+          });
+        }
+      }
+
+      // Parent validations: if client provided a parent value, validate it
+      if (parentProvided) {
+        const parentId = parent || null;
+
+        if (parentId && parentId === id) {
+          return res.status(400).json({
+            success: false,
+            message: "Không thể đặt danh mục cha là chính nó",
+          });
+        }
+
+        // if parentId provided and not null -> must exist and must not create cycle
+        if (parentId) {
+          let current = parentId;
+          // walk up the parent chain to ensure we don't set a descendant as parent
+          while (current) {
+            if (current.toString() === id.toString()) {
+              return res.status(400).json({
+                success: false,
+                message:
+                  "Không thể đặt một danh mục con làm danh mục cha (vòng lặp)",
+              });
+            }
+            const parentCategory = await Category.findById(current).select(
+              "parent"
+            );
+            if (!parentCategory) {
+              return res.status(404).json({
+                success: false,
+                message: "Danh mục cha không tồn tại",
+              });
+            }
+            current = parentCategory.parent
+              ? parentCategory.parent.toString()
+              : null;
+          }
+        }
+      }
+    } else {
+      // Nếu là danh mục cha, không cho phép đặt parent
+      if (typeof parent !== "undefined" && parent !== null) {
+        return res.status(400).json({
+          success: false,
+          message: "Danh mục cha không thể có parent",
+        });
+      }
+
+      // Validate unique name cho danh mục cha (parent = null)
+      if (name && name.trim() !== category.name) {
+        const existingCategory = await Category.findOne({
+          name: name.trim(),
+          parent: null,
+          _id: { $ne: id },
+        });
+
+        if (existingCategory) {
+          return res.status(400).json({
+            success: false,
+            message: "Tên danh mục đã tồn tại",
+          });
+        }
+      }
+    }
+
+    const updateData = {
+      ...(name && { name: name.trim() }),
+      ...(description !== undefined && {
+        description: description?.trim() || "",
+      }),
+      // Chỉ cập nhật parent nếu đang chỉnh sửa subcategory
+      ...(isCurrentlySubcategory &&
+        typeof parent !== "undefined" && {
+          parent: parent || null,
+        }),
+      ...(isActive !== undefined && {
+        isActive: isActive === "true" || isActive === true,
+      }),
+      ...(isEnabled !== undefined && {
+        isEnabled: isEnabled !== "false",
+      }),
+      ...(req.file && { image: req.file.path }),
+    };
+
+    const updatedCategory = await Category.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    }).populate("parent", "name");
+
+    res.status(200).json({
+      success: true,
+      message: "Cập nhật danh mục thành công",
+      category: updatedCategory,
+    });
+  } catch (error) {
+    console.error("Lỗi khi cập nhật danh mục:", error);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server khi cập nhật danh mục",
+    });
+  }
+};

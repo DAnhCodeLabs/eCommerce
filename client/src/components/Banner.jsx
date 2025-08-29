@@ -91,7 +91,7 @@ const Banner = () => {
   }
 
   return (
-    <div className="w-[95%] md:w-[1400px] mx-auto mt-10 px-4 md:px-6 md:my-6 flex flex-col md:flex-row justify-center items-center gap-4">
+    <div className="w-[95%] md:w-[1400px] mx-auto mt-10 md:my-6 flex flex-col md:flex-row justify-center items-center gap-4">
       {/* Banner chính */}
       <div className="md:w-2/3 w-full rounded-2xl overflow-hidden md:h-120 h-60">
         {banners.length > 0 ? (

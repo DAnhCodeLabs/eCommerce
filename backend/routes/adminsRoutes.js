@@ -13,6 +13,7 @@ import {
   adminGetDetailsBanner,
   adminGetParentCategories,
   adminUnBlockUser,
+  adminUpadteCategory,
   adminUpdateBanner,
 } from "../controllers/adminsController.js";
 import { uploadSingleImage } from "../middleware/upload.js";
@@ -67,6 +68,11 @@ adminRouter.put(
   "/update-banner/:id",
   authorizeRole(["admin"]),
   adminUpdateBanner
+);
+adminRouter.put(
+  "/update-category/:id",
+  authorizeRole(["admin"]),
+  adminUpadteCategory
 );
 //DELETE
 adminRouter.delete(
